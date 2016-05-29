@@ -1,43 +1,62 @@
 var Discord = require("discord.js");
 
 var Tybalt = new Discord.Client();
+Tybalt.on("connected", function()
+{
+    console.log("Connected!");
+}
+);
+
+Tybalt.on("disconnected", function()
+{
+  console.log("Disconnected, exiting!");
+  process.exit();
+}
+);
 
 Tybalt.on("message", function(message)
 {
-  console.log(message.channel);
-  if(message.author.username != "Tybalt Leftpaw")
+  //if we're dealing with a command
+  if(message.content.startsWith("!"))
   {
-    Tybalt.reply(message, message.content);
+
+    //if its a command, cut off the "!", we don't need it anymore
+    message.content = message.content.substr(1);
+
+
+
+    if(message.content == "off")
+    {
+      console.log(message.server);
+      console.log(message);
+      Tybalt.logout();
+    }
+    else if(messge.content == "joke")
+    {
+      tellAJoke(message);
+    }
+
+    var command = message.content.split(" ");
+    console.log(command);
+    if(command[0] == "echo")
+    {
+      console.log(command);
+      //var response = command.splice(1, 0, );
+      //response.concat
+      Tybalt.reply(message, command[1]);
+    }
+  }
+  else {
+
   }
 
-  if(typeof(message.channel) === "PMChannel")
-  {
-    Tybalt.reply(message, "PMChannel");
-    if(memberHasRole(message.author.username, "Leader") && message.content === "goodnight")
-    {
-      Tybalt.reply(message, "Goodnight, " + message.author.username);
-      //Tybalt.logout();
-    }
-    else
-    {
-      Tybalt.reply(message, "not a leader");
-    }
-
-  }
-  else if(typeof(message.channel) === "TextChannel")
-  {
-    Tybalt.reply(message, "TextChannel");
-    if(message.content === "Hi")
-    {
-      Tybalt.reply(message, "Hey there!");
-    }
-  }
-
-  if(message.content == "off")
-  {
-  Tybalt.logout();
-  }
 }
 );
+
+function tellAJoke(message)
+{
+  Tybalt.reply(message, "The Order of Whispers, the Durmand Priory, and the Vigil walk into a bar");
+  Tybalt.reply(message, "It sure was pact!");
+}
 
 Tybalt.login("corleonisbot@gmail.com", "ApplesForSale");
